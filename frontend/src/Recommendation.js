@@ -1,0 +1,114 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+import './Recommendation.css';
+
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
+
+function Recommendation() {
+    const [movie, setMovie] = useState('');
+    const [recommendations, setRecommendations] = useState([]);
+    const [suggestions, setSuggestions] = useState([]);
+    const [error, setError] = useState('');
+
+    const getRecommendations = async () => {
+        try {
+            if (movie.trim() === '') {
+                setRecommendations([]); // Clear recommendations if the movie input is empty
+                return;
+            }
+
+            const response = await axios.get(`http://localhost:5000/api/recommend?title=${movie}`);
+            const movieTitles = response.data;
+            const movieData = await Promise.all(movieTitles.map(fetchMovieDetails));
+            setRecommendations(movieData);
+            setError('');
+            setSuggestions([]); // Clear suggestions after fetching recommendations
+        } catch (error) {
+            console.error('Error fetching recommendations:', error);
+            setError('Failed to fetch recommendations.');
+            setRecommendations([]);
+        }
+    };
+
+    const fetchMovieDetails = async (title) => {
+        try {
+            const response = await axios.get(`${TMDB_BASE_URL}/search/movie`, {
+                params: {
+                    api_key: API_KEY,
+                    query: title,
+                },
+            });
+            const movie = response.data.results[0];
+            return {
+                title: movie.title,
+                poster: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+            };
+        } catch (error) {
+            console.error('Error fetching movie details:', error);
+            return { title, poster: '' };
+        }
+    };
+
+    const fetchSuggestions = async (query) => {
+        try {
+            if (query.length > 0) {
+                const response = await axios.get(`http://localhost:5000/api/suggestions?query=${query}`);
+                setSuggestions(response.data);
+            } else {
+                setSuggestions([]);
+                setRecommendations([]); // Clear recommendations when the query is empty
+            }
+        } catch (error) {
+            console.error('Error fetching suggestions:', error);
+            setSuggestions([]);
+        }
+    };
+
+    const handleInputChange = (e) => {
+        const value = e.target.value;
+        setMovie(value);
+        fetchSuggestions(value);
+    };
+
+    const handleSuggestionClick = (suggestion) => {
+        setMovie(suggestion);
+        setSuggestions([]);
+    };
+
+    return (
+        <div className='get'>
+            <div className='input-container'>
+                <input 
+                    type="text" 
+                    value={movie} 
+                    onChange={handleInputChange} 
+                    placeholder="Enter movie name"
+                    className='ph'
+                />
+                {suggestions.length > 0 && (
+                    <ul className='suggestions'>
+                        {suggestions.map((suggestion, index) => (
+                            <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
+                                {suggestion}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+            <button onClick={getRecommendations} className='getRec'>Get Recommendations</button>
+            {error && <p>{error}</p>}
+            <div className='container'>
+                {recommendations.map((rec, index) => (
+                    <div key={index} className='row'>
+                        {rec.poster && <img src={rec.poster} alt={rec.title} className='poster'                        />}
+                        <p>{rec.title}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+export default Recommendation;
+
