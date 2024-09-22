@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
 import sys
+df1 = pd.read_csv('C:\\Users\\bhuva\\mmm\\Movie_Recommendation_System\\backend\\tmdb_5000_credits.csv')
+df2 = pd.read_csv('C:\\Users\\bhuva\\mmm\\Movie_Recommendation_System\\backend\\movies.csv')
 
-df1 = pd.read_csv('E:/Git Repo/Movie Recommendation System/Movie Recommendation System/backend/tmdb_5000_credits.csv')
-df2 = pd.read_csv('E:/Git Repo/Movie Recommendation System/Movie Recommendation System/backend/movies.csv')
 
 df1.columns = ['id', 'tittle', 'cast', 'crew']
 df2 = df2.merge(df1, on='id')

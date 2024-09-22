@@ -14,16 +14,16 @@ function Recommendation() {
     const getRecommendations = async () => {
         try {
             if (movie.trim() === '') {
-                setRecommendations([]); // Clear recommendations if the movie input is empty
+                setRecommendations([]);
                 return;
             }
 
-            const response = await axios.get(`http://localhost:5000/api/recommend?title=${movie}`);
+            const response = await axios.get(`http://localhost:5003/api/recommend?title=${movie}`);
             const movieTitles = response.data;
             const movieData = await Promise.all(movieTitles.map(fetchMovieDetails));
             setRecommendations(movieData);
             setError('');
-            setSuggestions([]); // Clear suggestions after fetching recommendations
+            setSuggestions([]);
         } catch (error) {
             console.error('Error fetching recommendations:', error);
             setError('Failed to fetch recommendations.');
@@ -53,11 +53,11 @@ function Recommendation() {
     const fetchSuggestions = async (query) => {
         try {
             if (query.length > 0) {
-                const response = await axios.get(`http://localhost:5000/api/suggestions?query=${query}`);
+                const response = await axios.get(`http://localhost:5003/api/suggestions?query=${query}`);
                 setSuggestions(response.data);
             } else {
                 setSuggestions([]);
-                setRecommendations([]); // Clear recommendations when the query is empty
+                setRecommendations([]);
             }
         } catch (error) {
             console.error('Error fetching suggestions:', error);

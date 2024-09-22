@@ -4,14 +4,14 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const app = express();
 const cors = require('cors');
+const path = require('path');
 
 app.use(cors());
 app.use(express.json());
 
 let movies = [];
-
-// Read and parse CSV file
-fs.createReadStream('backend/movies.csv')
+const moviesCsvPath = path.join(__dirname,'movies.csv');
+fs.createReadStream(moviesCsvPath)
     .pipe(csv())
     .on('data', (row) => {
         movies.push(row);
@@ -46,7 +46,7 @@ app.get('/api/recommend', (req, res) => {
         return res.status(400).json({ error: 'Movie title is required' });
     }
 
-    const pythonScriptPath = './backend/recommendations.py';
+    const pythonScriptPath = './recommendations.py';
     runPythonScript(pythonScriptPath, movieTitle, res);
 });
 
@@ -57,7 +57,7 @@ app.get('/api/top', (req, res) => {
         return res.status(400).json({ error: 'Genre is required' });
     }
 
-    const pythonScriptPath = './backend/demographic.py';
+    const pythonScriptPath = './demographic.py';
     runPythonScript(pythonScriptPath, genre, res);
 });
 
@@ -89,13 +89,14 @@ app.get('/api/movie-details', (req, res) => {
         res.json({
             title: movie.title,
             poster: movie.poster_path,
+            
         });
     } else {
         res.status(404).json({ error: 'Movie not found' });
     }
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5003;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
