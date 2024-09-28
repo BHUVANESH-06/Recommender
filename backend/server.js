@@ -46,7 +46,7 @@ app.get('/api/recommend', (req, res) => {
         return res.status(400).json({ error: 'Movie title is required' });
     }
 
-    const pythonScriptPath = './recommendations.py';
+    const pythonScriptPath = 'backend/recommendations.py';
     runPythonScript(pythonScriptPath, movieTitle, res);
 });
 
@@ -57,7 +57,7 @@ app.get('/api/top', (req, res) => {
         return res.status(400).json({ error: 'Genre is required' });
     }
 
-    const pythonScriptPath = './demographic.py';
+    const pythonScriptPath = 'backend/demographic.py';
     runPythonScript(pythonScriptPath, genre, res);
 });
 
