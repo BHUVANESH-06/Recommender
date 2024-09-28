@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Recommendation.css';
+import { useNavigate } from 'react-router-dom';
 
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
@@ -10,7 +11,8 @@ function Recommendation() {
     const [recommendations, setRecommendations] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
     const [error, setError] = useState('');
-
+    const navigate = useNavigate();
+    
     const getRecommendations = async () => {
         try {
             if (movie.trim() === '') {
@@ -64,6 +66,10 @@ function Recommendation() {
             setSuggestions([]);
         }
     };
+    
+    const handleMovieClick = (movieTitle) => {
+        navigate(`/related/${encodeURIComponent(movieTitle)}`);
+    };
 
     const handleInputChange = (e) => {
         const value = e.target.value;
@@ -74,6 +80,12 @@ function Recommendation() {
     const handleSuggestionClick = (suggestion) => {
         setMovie(suggestion);
         setSuggestions([]);
+    };
+
+    const handleSearchClick = () => {
+        if (movie.trim()) {
+            navigate(`/related/${encodeURIComponent(movie)}`);
+        }
     };
 
     return (
@@ -97,11 +109,14 @@ function Recommendation() {
                 )}
             </div>
             <button onClick={getRecommendations} className='getRec'>Get Recommendations</button>
+            <button onClick={handleSearchClick} className='seaRec'>Search</button>
+            
             {error && <p>{error}</p>}
+            
             <div className='container'>
                 {recommendations.map((rec, index) => (
-                    <div key={index} className='row'>
-                        {rec.poster && <img src={rec.poster} alt={rec.title} className='poster'                        />}
+                    <div key={index} className='row' onClick={() => handleMovieClick(rec.title)}>
+                        {rec.poster && <img src={rec.poster} alt={rec.title} className='poster' />}
                         <p>{rec.title}</p>
                     </div>
                 ))}
@@ -111,4 +126,3 @@ function Recommendation() {
 }
 
 export default Recommendation;
-

@@ -89,8 +89,6 @@ function Related() {
                     <h2>{movieDetails.title}</h2>
                     <p><strong>Release Date:</strong> {movieDetails.releaseDate}</p>
                     <p><strong>Rating:</strong> {movieDetails.rating}/10</p>
-                    <p><strong>Genres:</strong> {movieDetails.genres}</p>
-                    <p><strong>Runtime:</strong> {movieDetails.runtime} mins</p>
                     <p><strong>Language:</strong> {movieDetails.language}</p>
                     {movieTrailer && (
                         <div className="movie-trailer">
