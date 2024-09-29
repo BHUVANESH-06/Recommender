@@ -10,15 +10,15 @@ function Related() {
     const { movieTitle } = useParams();
     const [recommendations, setRecommendations] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [movieDetails, setMovieDetails] = useState({});  // Hold movie details like title, overview, rating, etc.
-    const [moviePoster, setMoviePoster] = useState('');  // Hold the movie poster URL
-    const [movieTrailer, setMovieTrailer] = useState('');  // Hold the movie trailer key
-    const [cast, setCast] = useState([]);  // Hold cast information
+    const [movieDetails, setMovieDetails] = useState({});
+    const [moviePoster, setMoviePoster] = useState('');  
+    const [movieTrailer, setMovieTrailer] = useState(''); 
+    const [cast, setCast] = useState([]);  
 
     useEffect(() => {
         const fetchRecommendations = async () => {
             try {
-                const response = await axios.get(`http://localhost:5003/api/recommend?title=${movieTitle}`);
+                const response = await axios.get(`http://localhost:5003/api/collaborative-recommend?title=${movieTitle}`);
                 const movieDetails = await Promise.all(
                     response.data.map(async (title) => {
                         const movieResponse = await axios.get(`${TMDB_BASE_URL}/search/movie`, {
@@ -54,7 +54,6 @@ function Related() {
                         language: clickedMovie.original_language,
                     });
 
-                    // Fetch movie trailer
                     const trailerResponse = await axios.get(`${TMDB_BASE_URL}/movie/${clickedMovie.id}/videos`, {
                         params: {
                             api_key: API_KEY,
@@ -63,7 +62,6 @@ function Related() {
                     const trailer = trailerResponse.data.results.find(video => video.type === "Trailer");
                     setMovieTrailer(trailer ? trailer.key : '');
 
-                    // Fetch movie cast
                     const castResponse = await axios.get(`${TMDB_BASE_URL}/movie/${clickedMovie.id}/credits`, {
                         params: {
                             api_key: API_KEY,
@@ -105,7 +103,6 @@ function Related() {
                         </div>
                     )}
 
-                    {/* Cast */}
                     {cast.length > 0 && (
                         <div className="movie-cast">
                             <h3>Top Cast:</h3>

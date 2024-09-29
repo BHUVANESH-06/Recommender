@@ -96,6 +96,18 @@ app.get('/api/movie-details', (req, res) => {
     }
 });
 
+app.get('/api/collaborative-recommend', (req, res) => {
+    const movieTitle = req.query.title;
+
+    if (!movieTitle) {
+        return res.status(400).json({ error: 'Movie title is required' });
+    }
+
+    const pythonScriptPath = 'backend/ratings.py';
+    runPythonScript(pythonScriptPath, `${movieTitle}`, res); 
+});
+
+
 const PORT = process.env.PORT || 5003;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

@@ -8,7 +8,7 @@ import Image from './Assets/logo.png';
 
 function App() {
     return (
-        <Router>
+        <>
             <div className='nav'>
                 <img src={Image} alt="logo" className="logo" />
                 <div className='menu'>
@@ -21,6 +21,7 @@ function App() {
                 <h1>Only on Netflix</h1>
                 <h3>Netflix is the home of amazing original programming that you can’t find anywhere else. Movies, TV shows, specials and more, all tailored specifically to you.</h3>
             </div>
+            <Router>
                 <Routes>
                     <Route path='/' element={
                         <div className="rows">
@@ -41,6 +42,7 @@ function App() {
                     <Route path="/related/:movieTitle" element={<Related />} />
                 </Routes>
         </Router>
+        </>
     );
 }
 
