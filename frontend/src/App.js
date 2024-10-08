@@ -25,7 +25,7 @@ function App() {
                 <Routes>
                     <Route path='/' element={
                         <div className="rows">
-                            <h5>Movies based on your interest</h5>
+                            <h5>Movies similar to your interest</h5>
                             <Recommendation />
                             <h5>Science Fiction</h5>
                             <Top genre="sciencefiction" />

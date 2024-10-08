@@ -119,7 +119,7 @@ function Related() {
                     <img src={moviePoster} alt={`${movieTitle} poster`} />
                 </div>
             </div>
-            <h2 className='movies-related'>Movies Related to {movieTitle}</h2>
+            <h2 className='movies-related'>User who liked this also liked this</h2>
             {loading ? (
                 <p>Loading recommendations...</p>
             ) : (
