@@ -33,7 +33,7 @@ function App() {
                             <Top genre="animation" />
                             <h5>Fantasy</h5>
                             <Top genre="fantasy" />
-                            <h5>Romantic</h5>
+                            <h5>Romance</h5>
                             <Top genre="romance" />
                             <h5>Action</h5>
                             <Top genre="action" />
